@@ -1,0 +1,37 @@
+create table customer(custid number PRIMARY KEY,Fname char(30),Lname char(30),address char(50),phno number not null,city char(20),country char(20),datepur date,supid number references supplier(supid));
+insert into customer values(1001,'das','jeyaseelan','119,park avenue,II street',9841093428,'Coimbatore','India','2004-01-10',1),
+(2001,'gopi','govinraj','241, I floor, Kamaraj street, Madippakkam',9444124590,'chennai','india','2005-03-25',4),
+(1201,'dilip','kishore','43, II Avenue, Anna Nagar',9997234534,'banglore','india','2005-08-20',2),
+(1300,'aanand','chowdhury','42/1 sector 1, II Street',9841054348,'banglore','india','2005-05-15',2),
+(1220,'chandra','nagarjan','83,lal bagh',98410672356,'banglore','india','2006-02-12',4),
+(1221,'abhishek','kumar','13,kishori park',94447623901,'chennai','india','2004-05-15',1),
+(1320,'nikhil','pandit','218, alwaanya street',94448923091,'salem','india','2006-04-21',3),
+(1222,'meenu','monica','C11, church road',98410563421,'trichy','india','2004-08-30',1),
+(1225,'pavan','kumar','128/A, North Mada Street',99934782103,'madurai','india','2004-08-18',4);
+select * from customer;
+create table supplier(supid number primary key,sname char(30),scity char(30),sphone number not null,email char(50) unique);
+insert into supplier values(1,'dilip','chennai',8999900000,'dilip@abc.co.in'),
+(2,'tarun','madurai',8999911111,'tarun@xyz.com'),
+(3,'naresh','coimbatore',8999922222,'g.naresh@xyzl.com'),
+(4,'Ganesan','trichy',8999933333,'ganesan_83@ijk.com');
+select * from supplier;
+create table orders(orderid number primary key,odate date,custid number,quan number check(quan>0),itemid number references items(itemid));
+insert into orders values(1,'2004-01-12',1001,30,25),
+(2,'2005-05-06',1202,38,24),
+(3,'2006-12-16',1220,10,22),
+(4,'2004-05-21',1233,12,21);
+select * from orders;
+create table items(itemid number primary key,iname char(35) not null,supid number references supplier(supid),minqty number not null,maxqty number not null,price number(5,2));
+insert into items values(20,'pears soap',4,7,20,30.00),
+(21,'v.v.d.coconut oil 200ml',2,8,15,79.00),
+(22,'ponds powder 400g',3,6,25,106.00),
+(23,'reynolds pen-blue',1,10,30,15.00),
+(24,'reynolds pen-black',1,10,30,16.00),
+(25,'mysore sandal soap',4,7,25,25.00),
+(26,'fair&lovely cream 50g',3,5,15,55.00),
+(27,'rexono deo spray',2,5,20,100.00),
+(28,'dove soap',4,7,15,85.00);
+select * from items;
+select Fname,city,country from customer where city='chennai' or city='salem' or city='madurai';
+select customer.custid,customer.Fname,customer.Lname,customer.datepur,items.iname,items.price from customer inner join items on customer.supid=items.supid;
+select * from customer where supid=(select supid from items where iname='dove soap');
